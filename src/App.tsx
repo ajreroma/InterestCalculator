@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, ChangeEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Wallet, 
@@ -30,8 +30,24 @@ const formatCurrency = (value: number) => {
 };
 
 export default function App() {
-  const [principal, setPrincipal] = useState<number>(10000);
+  const [principalInput, setPrincipalInput] = useState<string>("10,000");
   const [apr, setApr] = useState<number>(5.25);
+
+  const principal = useMemo(() => {
+    return parseFloat(principalInput.replace(/,/g, '')) || 0;
+  }, [principalInput]);
+
+  const handlePrincipalChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/,/g, '');
+    if (rawValue === '' || /^\d*\.?\d*$/.test(rawValue)) {
+      const parts = rawValue.split('.');
+      if (parts[0]) {
+        // Add commas to the integer part
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      setPrincipalInput(parts.join('.'));
+    }
+  };
 
   const results = useMemo(() => {
     const rateAsDecimal = apr / 100;
@@ -88,9 +104,10 @@ export default function App() {
                 <div className="relative group">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">₱</span>
                   <input
-                    type="number"
-                    value={principal || ''}
-                    onChange={(e) => setPrincipal(Math.max(0, parseFloat(e.target.value) || 0))}
+                    type="text"
+                    inputMode="decimal"
+                    value={principalInput}
+                    onChange={handlePrincipalChange}
                     className="w-full pl-8 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-lg font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all font-mono"
                     placeholder="10,000.00"
                   />
