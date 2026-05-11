@@ -76,9 +76,6 @@ export default function App() {
         </div>
         <div className="hidden md:flex space-x-6 text-sm font-medium text-slate-500">
           <span className="text-blue-600 border-b-2 border-blue-600 py-5">Calculator</span>
-          <span className="cursor-pointer hover:text-slate-800 transition-colors">Projections</span>
-          <span className="cursor-pointer hover:text-slate-800 transition-colors">History</span>
-          <span className="cursor-pointer hover:text-slate-800 transition-colors">Settings</span>
         </div>
         <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
           <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
